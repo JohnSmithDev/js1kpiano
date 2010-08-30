@@ -8,37 +8,54 @@
 /* see /proj/test/python/maketone.py for the underlying concepts behind this
 */
 
-var MONO = 1;
-var SAMPLE_RATE = 8000; /* 1f40, hex 40=@ */
+/* These vars are for illustrative/documentation purposes */
 
-var NUM_SAMPLES = 5000; /* 13 88 - too short for Firefox 3.6.8 on Windows */
+var MONO = 1;
+var STEREO = 2;
+var CHANNEL_COUNT = STEREO;
+
+var BYTES_PER_SAMPLE = 2 * CHANNEL_COUNT;
+var BITS_PER_SAMPLE = 16;
+
+// var SAMPLE_RATE = 8000; /* 1f40, hex 40=@ */
+// var NUM_SAMPLES = 5000; /* 13 88 - too short for Firefox 3.6.8 on Windows */
+
+var SAMPLE_RATE = 44100 /* 0x0000ac44, hex 44=D */
+var NUM_SAMPLES = 30000; /* 0x00007530 hex 75=u, hex 30=0 */
+
+var SAMPLE_SIZE = NUM_SAMPLES * BYTES_PER_SAMPLE;
+
+
 /* var NUM_SAMPLES = 80000; /* 00 01 38 80, hex 38= 8 */
 
 /* we can't play the same player more than once, so create duplicate players
    for each note */
-var DUPE_NOTES = 8;
+var DUPE_NOTES = 5;
 var note_count = 0;
 
+var press_count=0;
 
 function wav_header(num_samples) {
     /* FF doesn't like space in data URI, but
        Safari and Opera are OK with it */
     return "RIFF%ac%13%00%00WAVEfmt%20" + /* NUM_SAMPLES + x24 */
 	"%10%00%00%00%01%00%01%00" +
-	"@%1f%00%00" +
-	"@%1f%00%00" +
+	"d%ac%00%00" + /* SAMPLE_RATE */
+	"d%ac%00%00" + /* SAMPLE_RATE */
 	"%01%00%08%00" +
-	"data%88%13%00%00"; /* NUM_SAMPLES */
+	"data0u%00%00"; /* NUM_SAMPLES */
 }
 
 function make_wav(freq) {
-    var angle_factor =  1273.2395447351628 / freq;
+    // var angle_factor =  1273.2395447351628 / freq; /* 8000hz */
+    var angle_factor = 7018.733 / freq; /* 441.khz, actually .732990 */
     var decay = 1;
     var retval = wav_header(NUM_SAMPLES);
 
     for (var i=0; i<NUM_SAMPLES; i++) {
 	var angle = i / angle_factor;
-	decay *= 0.9995;
+	// decay *= 0.9995; /* 8000hz */
+	decay *= 0.9999; /* 441.khz */
 	var level = Math.sin(angle) * decay;
 	var normalized = parseInt(level * 127) + 128;
 	/* print(i + " %" + (normalized<16?"0":"") + normalized.toString(16)); */
@@ -49,22 +66,25 @@ function make_wav(freq) {
 
 /*make_wav(261.64, 80000);*/
 
-var freq = 261.64;
+/* var freq = 261.64; /* middle C */
+var freq = 130.82 /* an octave down */
 
 /*var melody="02457975420";*/
 
 var notes=new Array(13);
 var keys=new Array(13);
 
-// var note_names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B","C"];
+var note_names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B","C"];
 
 function play_note(note_number) {
-    /*
+    
     var log_el = document.getElementById("debug");
     if (log_el) {
-	log_el.innerHTML = "<p>Playing " + note_names[note_number] + "</p>";
+	log_el.innerHTML = "<p>Playing " + note_names[note_number] +
+	    " (press_count=" + press_count + "</p>";
+	press_count++;
     }
-    */
+    
     var note_id = "myaudio" + note_number + "_" + (note_count % DUPE_NOTES);
     document.getElementById(note_id).play();
     note_count++;
@@ -102,8 +122,9 @@ for (var note_number=0; note_number<13; note_number++) {
 	notes[note_number] = document.createElement("audio");
 	notes[note_number].id = "myaudio" + note_number + "_" + i;
 	notes[note_number].src="data:audio/wave,"+ make_wav(freq);
-	notes[note_number].controls = false ;
-	/*notes[note_number].controls = false ;*/
+	notes[note_number].controls = true ;
+	notes[note_number].autobuffer = true;
+	notes[note_number].preload = "auto";
 	document.body.appendChild(notes[note_number]);
     }
 
