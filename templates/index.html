@@ -1,0 +1,130 @@
+<html>
+    <head>
+	<title>JS1k Piano</title>
+    </head>
+    <body>
+	<h1>JS1k Piano</h1>
+	<p>
+	    This is an entry for the <a href="http://js1k/home">JS1k</a>
+	    competition, to produce something interesting in 1k (or less)
+	    of JavaScript.  This entry is a simple music generator,
+	    controlled by the keyboard in a manner similar to a piano.
+	</p>
+	<p>
+	    <strong>Important:</strong> This application uses technologies
+	    which are not (as of August 2010) supported by all web browsers.
+	    Please see the <a href="#compatibility">compatibility
+		table</a> to see if your browser is one which
+	    provides the necessary functionality.
+	</p>
+
+	<div id="how_to_use_this">
+	    <h2>How to use this</h2>
+	    <p>
+		The QWERTY and number rows of your keyboard play the notes.
+		Keys Q,W,E,R,T,Y,U and I play the white notes (starting from
+		C), keys 2,3,5,6 and 7 play the black notes.
+	    </p>
+	    <p>
+		(Apologies to international users with keyboard layouts such
+		as AZERTY or QWERTZ.)
+	    </p>
+	    <p>
+		Please be patient when you first start the application,
+		as it has to create the sound waves for all the musical
+		notes.  This can take several seconds, depending on the
+		speed of your browser, your computer, etc.
+	    </p>
+	</div>
+	<div id="play_the_piano">
+	    <a href="/piano.html">Play the piano</a>
+	</div>
+
+	<div id="compatibility">
+	    <h2>Browser compatibility</h2>
+	    <p>
+		This application requires that your browser supports the
+		<a href="TOADD">&lt;audio&gt;</a> element introduced in
+		<a href="TOADD">HTML5</a>.  Further, it requires that the
+		browser support the <a href="TOADD">WAV</a> audio format.
+		and <a href="TOADD">data URIs</a>.  (See the
+		<a href="#tech">technical details</a> section about
+		what these things actually mean.)
+	    </p>
+	    <p>
+		Obviously you will need to enable JavaScript in your
+		browser.  If you don't know what this means, or how
+		to do it, don't worry - it will almost certainly be
+		enabled by default.
+	    </p>
+	    <p>
+		The table below only lists browser/operating system
+		configurations which I have personally tested, and
+		is by no means a definitive or authoritative list.
+	    </p>
+	    <table>
+		<tr>
+		    <th>Browser</th>
+		    <th>Version</th>
+		    <th>Operating System</th>
+		    <th>Does it work?</th>
+		    <th>Additional notes</th>
+		</tr>
+		<tr>
+		    <td>Chrome</td>
+		    <td>Any</td>
+		    <td>Windows, Mac OSX, Linux</td>
+		    <td>No</td>
+		    <td>Chrome does not support the WAV audio format</td>
+		</tr>
+		<tr>
+		    <td>Firefox</td>
+		    <td>3.6.8</td>
+		    <td>Mac OSX, Linux</td>
+		    <td>Yes</td>
+		    <td />
+		</tr>
+		<tr>
+		    <td>Firefox</td>
+		    <td>3.6.8</td>
+		    <td>Windows</td>
+		    <td>No</td>
+		    <td>I think this is down to some issue with small
+			audio files, and a fix may be possible</td>
+		</tr>
+		<tr>
+		    <td>Minefield (Firefox beta)</td>
+		    <td>4.0b5</td>
+		    <td>Windows, Mac OSX, Linux</td>
+		    <td>Yes</td>
+		    <td />
+		</tr>
+		<tr>
+		    <td>Opera</td>
+		    <td>10</td>
+		    <td>Windows, Mac OSX</td>
+		    <td>Yes</td>
+		    <td />
+		</tr>
+		<tr>
+		    <td>Safari</td>
+		    <td>5</td>
+		    <td>Windows, Mac OSX</td>
+		    <td>Yes*</td>
+		    <td>Safari requires QuickTime to be install for
+			audio (or video) playback.  This should be
+			the case for all Mac OSX installations, but
+			it may require separate installation on
+			some Windows systems
+		    </td>
+		</tr>
+	    </table>
+	</div>
+
+	<div id="tech">
+	    <h2>Technical details</h2>
+	    <p>To be added...</p>
+	</div>
+
+    </body>
+</html>

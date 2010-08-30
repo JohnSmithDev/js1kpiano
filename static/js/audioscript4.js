@@ -21,10 +21,12 @@ var BITS_PER_SAMPLE = 16;
 // var NUM_SAMPLES = 5000; /* 13 88 - too short for Firefox 3.6.8 on Windows */
 
 var SAMPLE_RATE = 44100 /* 0x0000ac44, hex 44=D */
+/* 44100 * 4 = 176,400 => 0x00 02 b1 10 */ 
 var NUM_SAMPLES = 30000; /* 0x00007530 hex 75=u, hex 30=0 */
 
 var SAMPLE_SIZE = NUM_SAMPLES * BYTES_PER_SAMPLE;
-
+/* that's 480,000 = 0x00075300 */
+/* REALLY? 30000 * 4 = 120,000 = 0x0001b4a0 surely? */
 
 /* var NUM_SAMPLES = 80000; /* 00 01 38 80, hex 38= 8 */
 
@@ -38,12 +40,16 @@ var press_count=0;
 function wav_header(num_samples) {
     /* FF doesn't like space in data URI, but
        Safari and Opera are OK with it */
-    return "RIFF%ac%13%00%00WAVEfmt%20" + /* NUM_SAMPLES + x24 */
-	"%10%00%00%00%01%00%01%00" +
-	"d%ac%00%00" + /* SAMPLE_RATE */
-	"d%ac%00%00" + /* SAMPLE_RATE */
-	"%01%00%08%00" +
-	"data0u%00%00"; /* NUM_SAMPLES */
+    return "RIFF%c4%b4%01%00" + /* SAMPLE_SIZE + x24 */ /* TODO ASCIIfy*/
+	"WAVEfmt%20" + 
+	"%10%00%00%00" + /* length of this subchunk - never changes */
+        "%01%00" +  /* 1 => uncompressed */
+	"%02%00" + /* CHANNEL_COUNT */
+	"D%ac%00%00" + /* SAMPLE_RATE */
+	"%10%b1%02%00" + /* SAMPLE_RATE * BYTES_PER_SAMPLE*/
+	"%04%00" + /* BYTES_SAMPLE */
+	"%10%00" + /* BITS_PER_SAMPLE */
+	"data%a0%38%01%00"; /* SAMPLE_SIZE - TODO ASCIIfy */
 }
 
 function make_wav(freq) {
@@ -57,9 +63,23 @@ function make_wav(freq) {
 	// decay *= 0.9995; /* 8000hz */
 	decay *= 0.9999; /* 441.khz */
 	var level = Math.sin(angle) * decay;
+	/* 8 bit code 
 	var normalized = parseInt(level * 127) + 128;
-	/* print(i + " %" + (normalized<16?"0":"") + normalized.toString(16)); */
 	retval += "%" + (normalized<16?"0":"") + normalized.toString(16);
+	*/
+	/* 16 bit code */
+	var normalized = parseInt(level * 32767);
+	if (normalized<0) {
+	    normalized=65536+normalized;
+	}
+	var high_byte = normalized >> 8;
+	var low_byte = normalized & 255;
+	retval += "%" + (low_byte<16?"0":"") + low_byte.toString(16);
+	retval += "%" + (high_byte<16?"0":"") + high_byte.toString(16);
+	/* and again for stereo */
+	retval += "%" + (low_byte<16?"0":"") + low_byte.toString(16);
+	retval += "%" + (high_byte<16?"0":"") + high_byte.toString(16);
+
     }
     return retval;
 }
