@@ -1,0 +1,3 @@
+var a=8,c=0,e=261.64,f=Array(13);function g(b){document.getElementById("myaudio"+b+"_"+c%a).play();c++}
+for(var h=0;h<13;h++){for(var i=0;i<a;i++){f[h]=document.createElement("audio");f[h].id="myaudio"+h+"_"+i;for(var j=1273.2395447351628/e,k=1,l="RIFF%ac%13%00%00WAVEfmt%20%10%00%00%00%01%00%01%00@%1f%00%00@%1f%00%00%01%00%08%00data%88%13%00%00",m=0;m<5E3;m++){var n=m/j;k*=0.9995;var o=parseInt(Math.sin(n)*k*127)+128;l+="%"+(o<16?"0":"")+o.toString(16)}f[h].src="data:audio/wave,"+l;f[h].controls=false;document.body.appendChild(f[h])}e*=1.059463}var p=[81,50,87,51,69,82,53,84,54,89,55,85,73];
+document.onkeydown=function(b){b=b.keyCode;for(var d=0;d<p.length;d++)b==p[d]&&g(d);if(b==219)octave--;else b==220&&octave++};g(0);
