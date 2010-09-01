@@ -8,7 +8,11 @@
 /* see /proj/test/python/maketone.py for the underlying concepts behind this
 */
 
+var q = 16;
+
 /* These vars are for illustrative/documentation purposes */
+
+
 
 var MONO = 1;
 var STEREO = 2;
@@ -32,10 +36,11 @@ var SAMPLE_SIZE = NUM_SAMPLES * BYTES_PER_SAMPLE;
 
 /* we can't play the same player more than once, so create duplicate players
    for each note */
-var DUPE_NOTES = 5;
+var DUPE_NOTES = 9;
 var note_count = 0;
 
-var press_count=0;
+
+/*var press_count=0;*/
 
 function wav_header(num_samples) {
     /* FF doesn't like space in data URI, but
@@ -61,6 +66,15 @@ function make_wav(freq) {
     for (var i=0; i<NUM_SAMPLES; i++) {
 	var angle = i / angle_factor;
 	// decay *= 0.9995; /* 8000hz */
+	/*
+	if (i<100) {
+	    decay=0;
+	} else if (i>100 && i<1000) {
+	    decay=(i-100)/900;
+	} else {
+	    decay *= 0.9995;
+	}
+	*/
 	decay *= 0.9999; /* 441.khz */
 	var level = Math.sin(angle) * decay;
 	/* 8 bit code 
@@ -74,11 +88,11 @@ function make_wav(freq) {
 	}
 	var high_byte = normalized >> 8;
 	var low_byte = normalized & 255;
-	retval += "%" + (low_byte<16?"0":"") + low_byte.toString(16);
-	retval += "%" + (high_byte<16?"0":"") + high_byte.toString(16);
-	/* and again for stereo */
-	retval += "%" + (low_byte<16?"0":"") + low_byte.toString(16);
-	retval += "%" + (high_byte<16?"0":"") + high_byte.toString(16);
+	for (var channel_loop=0; channel_loop<2; channel_loop++) {
+	    /* twice for stereo */
+	    retval += "%" + (low_byte<q?"0":"") + low_byte.toString(q) +
+		"%" + (high_byte<q?"0":"") + high_byte.toString(q);
+	}
 
     }
     return retval;
@@ -86,36 +100,69 @@ function make_wav(freq) {
 
 /*make_wav(261.64, 80000);*/
 
-/* var freq = 261.64; /* middle C */
-var freq = 130.82 /* an octave down */
+var freq = 261.64; /* middle C */
+/*var freq = 130.82 /* an octave down */
 
 /*var melody="02457975420";*/
 
-var notes=new Array(13);
-var keys=new Array(13);
+var notes=new Array(q); /* 13 really, but maybe can save bytes? */
+/*var keys=new Array(13);*/
 
-var note_names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B","C"];
+/*
+var note_names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "Ab", "A", "A#", "B","C"];
+*/
+
+var note_offsets=[0,0,1,1,2,3,3,4,5,5,5,6,7];
+var s="\u266f"; 
+var note_accents=["", s, /* C */
+		  "", s,  /* D */
+		  "", /* E */
+		  "", s,  /* F */
+		  "", /* G */
+		  "\u266d", "", s,  /* A */
+		  "", /* B */
+		  "" /* C */
+		 ];
+
+
+function init_canvas() {
+	cv.height=99;
+	c.font = "50px sans"; /* need a font name it seems */
+	
+	note_count=0;
+
+}		  
 
 function play_note(note_number) {
     
+/*
     var log_el = document.getElementById("debug");
     if (log_el) {
 	log_el.innerHTML = "<p>Playing " + note_names[note_number] +
 	    " (press_count=" + press_count + "</p>";
 	press_count++;
     }
-    
-    var note_id = "myaudio" + note_number + "_" + (note_count % DUPE_NOTES);
+*/  
+  
+    var note_id = /* "myaudio" + */ note_number + "_" + (note_count % DUPE_NOTES);
     document.getElementById(note_id).play();
+    var x="\u2669"+note_accents[note_number];
+
+    if (note_count>=q) {
+	init_canvas();
+    }
+    c.fillText(x, 5 + (note_count*50), 99-(note_offsets[note_number]*5));
+
     note_count++;
 }
 
+/*
 function play_note_from_key() {
     var key_number = this.id.substr(3);
-    /*alert("pressed " + key_number);*/
+    /*alert("pressed " + key_number);* /
     play_note(key_number)
-
 }
+*/
 
 /*
 function play_note_in_melody(seq_number) {
@@ -128,8 +175,10 @@ function play_note_in_melody(seq_number) {
 }
 */
 
-var xpos=0;
-for (var note_number=0; note_number<13; note_number++) {
+/*var xpos=0;*/
+/* max is really 13 rather than 16 aka q, but trying to save bytes */
+for (var note_number=0; note_number<q; note_number++) {
+    /*
     var white_note = true;
     if ((note_number % 12)==1 ||
 	(note_number % 12)==3 ||
@@ -138,13 +187,21 @@ for (var note_number=0; note_number<13; note_number++) {
 	(note_number % 12)==10) {
 	white_note = false;
     } 
+    */
+    freqstr=make_wav(freq); /* space inefficient but quicker */
     for (var i=0; i<DUPE_NOTES; i++) {
+
 	notes[note_number] = document.createElement("audio");
-	notes[note_number].id = "myaudio" + note_number + "_" + i;
-	notes[note_number].src="data:audio/wave,"+ make_wav(freq);
-	notes[note_number].controls = true ;
-	notes[note_number].autobuffer = true;
+	notes[note_number].src="data:audio/wave,"+ freqstr;
+	/*notes[note_number].autobuffer = true;*/
 	notes[note_number].preload = "auto";
+
+	/* More efficient but causes Opera to crash 
+	notes[note_number] = Audio("data:audio/wave,"+ make_wav(freq));
+	*/
+	notes[note_number].id = /*"myaudio" + */ note_number  + "_" + i;
+
+	/*notes[note_number].controls = true ;*/
 	document.body.appendChild(notes[note_number]);
     }
 
@@ -227,16 +284,40 @@ function play_from_keyboard(e) {
 	    /* break; /* not strictly necessary */
 	}
     }
+    /*
     if (key_id == 219) {
 	octave--;
     } else if (key_id == 220) {
 	octave++;
     }
-
+    */
 }
+
+var cv = document.getElementById("c");
+var c= cv.getContext("2d");
+cv.width=999;
+init_canvas();
+
+/* these were just for seeing how much space I had in the canvas
+  they aren't needed for proper use
+c.fillStyle="#ff8";
+c.fillRect(0,0,cv.width,cv.height);
+c.fillStyle="#000";
+*/
+
+/*
+cv.height=99;
+c.font = "20px sans"; 
+*/
+/*c.font = "bold 20px sans-serif";*/
+/* c.font="20px"; /* fails to parse */
+/*c.fontSize="20px"; /* doesn't seem to have any effect */
+
+
 document.onkeydown = play_from_keyboard;
 
-play_note(0);
+/*play_note(0); /* just to indicate ready */
+
 
 
 
