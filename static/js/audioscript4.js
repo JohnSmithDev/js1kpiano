@@ -27,16 +27,18 @@ var BITS_PER_SAMPLE = 16;
 var SAMPLE_RATE = 44100 /* 0x0000ac44, hex 44=D */
 /* 44100 * 4 = 176,400 => 0x00 02 b1 10 */ 
 var NUM_SAMPLES = 30000; /* 0x00007530 hex 75=u, hex 30=0 */
+/* var NUM_SAMPLES = 40000; /* 0x00009c40, hex 40=@ */
 
 var SAMPLE_SIZE = NUM_SAMPLES * BYTES_PER_SAMPLE;
 /* that's 480,000 = 0x00075300 */
 /* REALLY? 30000 * 4 = 120,000 = 0x0001b4a0 surely? */
+/* 40000 * 4 = 160,000 = 0x0002 71 00, hex 71 = ASCII q*/
 
 /* var NUM_SAMPLES = 80000; /* 00 01 38 80, hex 38= 8 */
 
 /* we can't play the same player more than once, so create duplicate players
    for each note */
-var DUPE_NOTES = 9;
+var DUPE_NOTES = 5;
 var note_count = 0;
 
 
@@ -54,7 +56,7 @@ function wav_header(num_samples) {
 	"%10%b1%02%00" + /* SAMPLE_RATE * BYTES_PER_SAMPLE*/
 	"%04%00" + /* BYTES_SAMPLE */
 	"%10%00" + /* BITS_PER_SAMPLE */
-	"data%a0%38%01%00"; /* SAMPLE_SIZE - TODO ASCIIfy */
+	"data%a0%b4%01%00"; /* SAMPLE_SIZE - TODO ASCIIfy */
 }
 
 function make_wav(freq) {
@@ -75,7 +77,7 @@ function make_wav(freq) {
 	    decay *= 0.9995;
 	}
 	*/
-	decay *= 0.9999; /* 441.khz */
+	decay *= 0.9998; /* 441.khz */
 	var level = Math.sin(angle) * decay;
 	/* 8 bit code 
 	var normalized = parseInt(level * 127) + 128;
@@ -126,7 +128,7 @@ var note_accents=["", s, /* C */
 
 
 function init_canvas() {
-	cv.height=99;
+	cv.width++;
 	c.font = "50px sans"; /* need a font name it seems */
 	
 	note_count=0;
@@ -151,7 +153,7 @@ function play_note(note_number) {
     if (note_count>=q) {
 	init_canvas();
     }
-    c.fillText(x, 5 + (note_count*50), 99-(note_offsets[note_number]*5));
+    c.fillText(x, 5 + (note_count*60), 99-(note_offsets[note_number]*5));
 
     note_count++;
 }
@@ -188,13 +190,13 @@ for (var note_number=0; note_number<q; note_number++) {
 	white_note = false;
     } 
     */
-    freqstr=make_wav(freq); /* space inefficient but quicker */
+    var freqstr=make_wav(freq); /* space inefficient but quicker */
     for (var i=0; i<DUPE_NOTES; i++) {
 
 	notes[note_number] = document.createElement("audio");
 	notes[note_number].src="data:audio/wave,"+ freqstr;
-	/*notes[note_number].autobuffer = true;*/
-	notes[note_number].preload = "auto";
+	/*notes[note_number].autobuffer = true;*/ 
+	/* notes[note_number].preload = "auto"; /* is this needed on data URI? */
 
 	/* More efficient but causes Opera to crash 
 	notes[note_number] = Audio("data:audio/wave,"+ make_wav(freq));
@@ -300,6 +302,8 @@ init_canvas();
 
 /* these were just for seeing how much space I had in the canvas
   they aren't needed for proper use
+*/
+/*
 c.fillStyle="#ff8";
 c.fillRect(0,0,cv.width,cv.height);
 c.fillStyle="#000";
@@ -312,7 +316,7 @@ c.font = "20px sans";
 /*c.font = "bold 20px sans-serif";*/
 /* c.font="20px"; /* fails to parse */
 /*c.fontSize="20px"; /* doesn't seem to have any effect */
-
+c.fillText("Ready", 0,40);
 
 document.onkeydown = play_from_keyboard;
 

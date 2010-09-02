@@ -1,0 +1,61 @@
+/* Perfunctory CSS for the js1kpiano brochureware pages
+   This file copyright Menboku Ltd 2010
+   Licenced under GPL v2
+   http://www.menboku.co.uk
+   http://js1kpiano.appspot.com
+*/
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: small;
+}
+
+h1, h2, h3 {
+    font-weight: 900;
+    padding-bottom: 0px;
+    padding-top: 20px;
+    color: #840;
+}
+
+table, td, th {
+    border: 1px solid;
+    border-collapse: collapse;
+    font-size: small;
+}
+
+#play_the_piano {
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    padding: 10px;
+    background-color: #080;
+    font-size: 20px;
+    font-family: Helvetica, Arial, sans-serif;
+    text-align: center;
+}
+
+a#play_the_piano {
+    color: #fff;
+}
+
+#play_the_piano:hover {
+    background-color: #4c4;
+}
+
+.it_works {
+    background-color: #8f8;
+}
+
+.its_broken {
+    background-color: #c00;
+    color: #fff;
+}
+
+.hey_this_is_important {
+    color: #f00;
+    font-weight: 900;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.by_the_way {
+    font-style: italic;
+}

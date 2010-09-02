@@ -1,60 +1,82 @@
 <html>
     <head>
 	<title>JS1k Piano</title>
+	<link rel="stylesheet" href="/static/css/common.css" type="text/css" />
     </head>
     <body>
 	<h1>JS1k Piano</h1>
+	<nav>
+	    <a href="#how_to_use_this">How to use this</a>
+	    |
+	    <a href="#compatibility">Browser compatibility</a>
+	    |
+	    <a href="#tech">Technical details</a>
+	    | 
+	    <a href="#links">Links to external HTML5 audio pages</a>
+	    
+		
+	</nav>
+
 	<p>
-	    This is an entry for the <a href="http://js1k/home">JS1k</a>
+	    This is an entry for the <a href="http://js1k.com/home">JS1k</a>
 	    competition, to produce something interesting in 1k (or less)
 	    of JavaScript.  This entry is a simple music generator,
-	    controlled by the keyboard in a manner similar to a piano.
+	    controlled by the keyboard in a manner similar to a piano - although
+	    the <a href="http://en.wikipedia.org/wiki/Stylophone">stylophone</a>
+	    might be a better comparison, both in terms of sound fidelity and 
+	    usability :-).
 	</p>
 	<p>
-	    <strong>Important:</strong> This application uses technologies
-	    which are not (as of August 2010) supported by all web browsers.
+	    <span class="hey_this_is_important">Important:</span> This application uses
+	    web technologies
+	    which are not - as of September 2010 - supported by all browsers.
 	    Please see the <a href="#compatibility">compatibility
-		table</a> to see if your browser is one which
+		table</a> below to see if your browser is one which
 	    provides the necessary functionality.
 	</p>
 
 	<div id="how_to_use_this">
 	    <h2>How to use this</h2>
 	    <p>
-		The QWERTY and number rows of your keyboard play the notes.
-		Keys Q,W,E,R,T,Y,U and I play the white notes (starting from
-		C), keys 2,3,5,6 and 7 play the black notes.
-	    </p>
-	    <p>
-		(Apologies to international users with keyboard layouts such
-		as AZERTY or QWERTZ.)
-	    </p>
-	    <p>
 		Please be patient when you first start the application,
 		as it has to create the sound waves for all the musical
 		notes.  This can take several seconds, depending on the
 		speed of your browser, your computer, etc.
+		<span class="hey_this_is_important">The application will
+		   indicate when initialization is complete by displaying
+		    a "Ready" message.</span>
+	    </p>
+	    <p>
+		Keys Q,W,E,R,T,Y,U and I play the white notes (starting from
+		C), keys 2,3,5,6 and 7 play the black notes.
+		<span class="by_the_way">
+		    (Apologies to international users with keyboard layouts such
+		    as AZERTY or QWERTZ.)
+		</span>
 	    </p>
 	</div>
-	<div id="play_the_piano">
-	    <a href="/piano.html">Play the piano</a>
-	</div>
+	<p>
+	    <a id="play_the_piano" href="/piano.html">Play the piano</a>
+	</p>
 
 	<div id="compatibility">
 	    <h2>Browser compatibility</h2>
 	    <p>
-		This application requires that your browser supports the
-		<a href="TOADD">&lt;audio&gt;</a> element introduced in
-		<a href="TOADD">HTML5</a>.  Further, it requires that the
-		browser support the <a href="TOADD">WAV</a> audio format.
-		and <a href="TOADD">data URIs</a>.  (See the
-		<a href="#tech">technical details</a> section about
-		what these things actually mean.)
+		This application requires that your browser supports (parts of) the
+		<a href="http://www.w3schools.com/html5/tag_audio.asp>&lt;audio&gt;</a> element introduced in
+		<a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/">HTML5</a>
+		specification.  Further, it requires that the
+		browser support the <a href="https://ccrma.stanford.edu/courses/422/projects/WaveFormat/">WAV</a> format for audio data.
+		<span class="by_the_way">
+		    (See the
+		    <a href="#tech">technical details</a> section about
+		    what these things actually mean.)
+		</span>
 	    </p>
 	    <p>
 		Obviously you will need to enable JavaScript in your
-		browser.  If you don't know what this means, or how
-		to do it, don't worry - it will almost certainly be
+		browser.  If you don't know what this means, don't worry -
+		it will almost certainly be
 		enabled by default.
 	    </p>
 	    <p>
@@ -70,60 +92,113 @@
 		    <th>Does it work?</th>
 		    <th>Additional notes</th>
 		</tr>
-		<tr>
+		<tr class="its_broken">
 		    <td>Chrome</td>
 		    <td>Any</td>
 		    <td>Windows, Mac OSX, Linux</td>
 		    <td>No</td>
-		    <td>Chrome does not support the WAV audio format</td>
+		    <td>
+			Chrome does not support the WAV audio format, apparently because
+			they don't want to encourage uncompressed formats.  Somehow I doubt
+			you could generate MP3s, OGGs etc in &lt;1k of JavaScript ;-) See
+			<a href="http://code.google.com/p/chromium/issues/detail?id=23916">23916</a>
+			and
+			<a href="http://code.google.com/p/chromium/issues/detail?id=42687">42687</a>
+			on their issue tracker for more information.
+		    </td>
 		</tr>
-		<tr>
+		<tr class="it_works">
 		    <td>Firefox</td>
 		    <td>3.6.8</td>
-		    <td>Mac OSX, Linux</td>
+		    <td>Mac OSX, Windows, Linux</td>
 		    <td>Yes</td>
 		    <td />
 		</tr>
-		<tr>
-		    <td>Firefox</td>
-		    <td>3.6.8</td>
-		    <td>Windows</td>
-		    <td>No</td>
-		    <td>I think this is down to some issue with small
-			audio files, and a fix may be possible</td>
-		</tr>
-		<tr>
+		<tr class="it_works">
 		    <td>Minefield (Firefox beta)</td>
 		    <td>4.0b5</td>
 		    <td>Windows, Mac OSX, Linux</td>
 		    <td>Yes</td>
 		    <td />
 		</tr>
-		<tr>
+		<tr class="it_works">
 		    <td>Opera</td>
-		    <td>10</td>
+		    <td>10.something</td>
 		    <td>Windows, Mac OSX</td>
 		    <td>Yes</td>
 		    <td />
 		</tr>
-		<tr>
+		<tr class="it_works">
 		    <td>Safari</td>
-		    <td>5</td>
+		    <td>5.0.1</td>
 		    <td>Windows, Mac OSX</td>
 		    <td>Yes*</td>
-		    <td>Safari requires QuickTime to be install for
+		    <td>Safari requires QuickTime to be installed for
 			audio (or video) playback.  This should be
-			the case for all Mac OSX installations, but
-			it may require separate installation on
-			some Windows systems
+			the default on Mac OSX, but you might have to
+			install QuickTime on Windows, as it isn't
+			included in the Safari installer.
+			<br />
+			Compared to other
+			browsers, Safari is noticeably
+			slower to start, and more laggy in responding
+			to keyboard presses.
 		    </td>
 		</tr>
+		<tr class="its_broken">
+		    <td>Internet Explorer</td>
+		    <td>IE9 Platform Preview</td>
+		    <td>Windows 7</td>
+		    <td>No</td>
+		    <td>Doesn't support WAV audio, but it doesn't even seem to get
+		    far enough to even be able to try to play audio files</td>
+		</tr>
+		<tr class="its_broken">
+		    <td>Internet Explorer</td>
+		    <td>6,7,8</td>
+		    <td>Windows</td>
+		    <td>No</td>
+		    <td>Don't even think about it :-)</td>
+		</tr>
 	    </table>
+	    <p>
+		Given the fact that this app doesn't work in Chrome, it's unlikely to
+		get very far
+		in the <a href="http://js1k.com/rules">JS1k judging</a>.
+	    </p>
 	</div>
 
 	<div id="tech">
 	    <h2>Technical details</h2>
-	    <p>To be added...</p>
+	    <p>To be properly written up...</p>
+	    <h3 id="data_uris">Data URIs</h3>
+	    <h3 id="audio">Generating audio data in JavaScript</h3>
+	    <h3 id="compiling">Compiling down to under 1k in size</h3>
+	    <h3 id="issues">Browser issues</h3>
+	    <h4 id="firefox_issues">Firefox</h4>
+	    <ul>
+		<li>Spaces in data URIs</li>
+		<li>Sample rates in 3.6.8 on Windows</li>
+	    </ul>
+	    <h4 id="opera_issues">Opera</h4>
+	    <ul>
+		<li>Crash when trying to do 'new Audio()' with large data URIs</li>
+	    </ul>
+	    <h4 id="safari_issues">Safari</h4>
+	    <ul>
+		<li>Clearing the canvas</li>
+		<li>Slowness</li>
+	    </ul>
+	    <h4 id="chrome_issues">Chrome</h4>
+	    <ul>
+		<li>Clearing the canvas</li>
+		<li>Lack of support for WAV</li>
+	    </ul>
+	</div>
+
+	<div id="links">
+	    <h2>Links</h2>
+	    <p>To add....</p>
 	</div>
 
     </body>
