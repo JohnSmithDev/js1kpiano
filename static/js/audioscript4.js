@@ -1,4 +1,9 @@
-/* (c) Menboku Ltd 2010.  Licenced under GPL v2 */
+/* An entry for the JS1k competition
+   See http://js1kpiano.appspot.com for more info about how this
+   works (or doesn't ;-)
+   (c) Menboku Ltd 2010 - http://www.menboku.co.uk
+   Licenced under GPL v2 - http://www.gnu.org/licenses/gpl-2.0.html
+*/
 
 /* Closure compiler usage:
   java -jar compiler.jar --compilation_level ADVANCED_OPTIMIZATIONS
