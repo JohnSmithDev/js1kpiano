@@ -8,7 +8,7 @@ from google.appengine.ext import db
 class Visitor(db.Model):
   date_created = db.DateTimeProperty(auto_now_add = True)
   date_modified = db.DateTimeProperty(auto_now = True)
-  count = db.IntegerProperty(default = 0)
+  count = db.IntegerProperty(default = 1)
   user_agent = db.TextProperty()
   browser_name = db.StringProperty()
   browser_version = db.StringProperty()
@@ -16,5 +16,7 @@ class Visitor(db.Model):
   os_name = db.StringProperty()
   os_version = db.StringProperty()
   ip = db.StringProperty()
+  referrer = db.StringProperty()
+  page = db.StringProperty()
 
 

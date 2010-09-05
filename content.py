@@ -19,6 +19,9 @@ class BrowserDetails:
         self.browser_name = "Iron"
         self.browser_family = "Chrome"
         self.browser_engine = "Webkit"
+    elif user_agent_string.find("Camino") >=0 :
+        self.browser_name = "Camino"
+        self.browser_engine = "Gecko"
     elif user_agent_string.find("Firefox") >=0 :
         self.browser_name = "Firefox"
         self.browser_engine = "Gecko"
@@ -56,13 +59,29 @@ class BrowserDetails:
       return False
 
 
-def dict_for_django_template(rh):
+def get_referrer(rh):
+  if "Referer" in rh.request.headers:
+    ref = rh.request.headers["Referer"]
+    if len(ref)>0:
+      return ref
+  if "Referrer" in rh.request.headers:
+    ref = rh.request.headers["Referrer"]
+    if len(ref)>0:
+      return ref
+  return "[No referrer specified]"
+
+def get_user_agent(rh):
   if "User-Agent" in rh.request.headers:
     ua=rh.request.headers['User-Agent']
-    if not ua or len(ua)==0:
-      ua="Unknown"
+    if len(ua)>0:
+      return ua
+    else:
+      return "[Empty User-Agent]"
   else:
-    ua = "[No browser User-Agent passed]"
+    return "[No browser User-Agent passed]"
+
+def dict_for_django_template(rh):
+  ua = get_user_agent(rh)
   browser = BrowserDetails(ua)
   logging.debug("%s / %s / %s <= %s" %
                 (browser.browser_name, browser.browser_engine,

@@ -16,24 +16,29 @@ import wsgiref.handlers
 from models import *
 
 import content
+import offline
 
 class MainPage(webapp.RequestHandler):
   def get(self):
     template_file=os.path.join("templates", "index.html")
     self.response.out.write(template.render(template_file,
                            content.dict_for_django_template(self)))
+    offline.enqueue_log_task(self, "main")
+    
 
 class InfoPage(webapp.RequestHandler):
   def get(self):
     template_file=os.path.join("templates", "more_info.html")
     self.response.out.write(template.render(template_file,
                            content.dict_for_django_template(self)))
+    offline.enqueue_log_task(self, "info")
 
 class PianoPage(webapp.RequestHandler):
   def get(self):
     template_file=os.path.join("templates", "piano.html")
     self.response.out.write(template.render(template_file,
                              content.dict_for_django_template(self)))
+    offline.enqueue_log_task(self, "piano")
 
 
 def main():
