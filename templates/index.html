@@ -50,6 +50,8 @@
 		<span class="technobabble">{{ userAgent|escape}} </span>
 	    </p>
 	</div>
+	{% else %}
+	<!-- {{ userAgent|escape }} -->
 	{% endif %}
 
 	<div id="how_to_use_this">
@@ -72,7 +74,7 @@
 		</span>
 	    </p>
 	</div>
-	<p>
+	<p id="play_the_piano">
 	    <a id="play_the_piano" href="/piano.html">Play the piano</a>
 	</p>
     </body>

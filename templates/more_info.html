@@ -24,7 +24,7 @@
 	    <h2>Browser compatibility</h2>
 	    <p>
 		This application requires that your browser supports (parts of) the
-		<a href="http://www.w3schools.com/html5/tag_audio.asp>&lt;audio&gt;</a> element introduced in
+		<a href="http://www.w3schools.com/html5/tag_audio.asp">&lt;audio&gt;</a> element introduced in
 		<a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/">HTML5</a>
 		specification.  Further, it requires that the
 		browser support the <a href="https://ccrma.stanford.edu/courses/422/projects/WaveFormat/">WAV</a> format for audio data.
@@ -54,7 +54,11 @@
 		    <th>Additional notes</th>
 		</tr>
 		<tr class="its_broken">
-		    <td>Chrome</td>
+		    <td>
+			<a href="http://www.google.com/chrome">Chromium</a>,
+			<a href="http://www.chromium.org">Chromium</a>,
+			<a href="http://www.srware.net/en/software_srware_iron.php">Iron</a>
+		    </td>
 		    <td>Any</td>
 		    <td>Windows, Mac OSX, Linux</td>
 		    <td>No</td>
@@ -69,28 +73,28 @@
 		    </td>
 		</tr>
 		<tr class="it_works">
-		    <td>Firefox</td>
+		    <td><a href="http://www.mozilla.com/firefox">Firefox</a></td>
 		    <td>3.6.8</td>
 		    <td>Mac OSX, Windows, Linux</td>
 		    <td>Yes</td>
 		    <td />
 		</tr>
 		<tr class="it_works">
-		    <td>Minefield (Firefox beta)</td>
+		    <td><a href="http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-trunk/">Minefield (Firefox beta)</a></td>
 		    <td>4.0b5</td>
-		    <td>Windows, Mac OSX, Linux</td>
+		    <td>Windows</td>
 		    <td>Yes</td>
 		    <td />
 		</tr>
 		<tr class="it_works">
-		    <td>Opera</td>
+		    <td><a href="http://www.opera.com">Opera</a></td>
 		    <td>10.something</td>
 		    <td>Windows, Mac OSX</td>
 		    <td>Yes</td>
 		    <td />
 		</tr>
 		<tr class="it_works">
-		    <td>Safari</td>
+		    <td><a href="http://www.apple.com/safari">Safari</a></td>
 		    <td>5.0.1</td>
 		    <td>Windows, Mac OSX</td>
 		    <td>Yes*</td>
@@ -107,7 +111,20 @@
 		    </td>
 		</tr>
 		<tr class="its_broken">
-		    <td>Internet Explorer</td>
+		    <td>Mobile Safari</td>
+		    <td></td>
+		    <td>iOS (iPhone, iPod Touch, iPad)</td>
+		    <td>No</td>
+		    <td>
+			Lack of a physical keyboard is a fundamental obstacle.
+			I do have some aborted code that should work with a
+			touchscreen, but it won't be able to fit into 1k along
+			with the existing keyboard-oriented code.  I'll post
+			this up here at some point when I get the chance.
+		    </td>
+		</tr>
+		<tr class="its_broken">
+		    <td><a href="http://ie.microsoft.com/testdrive/">Internet Explorer</a></td>
 		    <td>IE9 Platform Preview</td>
 		    <td>Windows 7</td>
 		    <td>No</td>

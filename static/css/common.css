@@ -17,6 +17,10 @@ h1, h2, h3 {
     color: #840;
 }
 
+h1 {
+    text-shadow: 1px 1px 0px #888;
+}
+
 h1 > a {
     text-decoration: None;
     color: #840;
@@ -26,23 +30,24 @@ table, td, th {
     border: 1px solid;
     border-collapse: collapse;
     font-size: small;
+    border-color: #000;
 }
 
 #play_the_piano {
+    text-align: center;
+}
+
+a#play_the_piano {
     border-radius: 10px;
     -moz-border-radius: 10px;
     padding: 10px;
     background-color: #060;
     font-size: 20px;
     font-family: Helvetica, Arial, sans-serif;
-    text-align: center;
-}
-
-a#play_the_piano {
     color: #fff;
 }
 
-#play_the_piano:hover {
+a#play_the_piano:hover {
     background-color: #4c4;
 }
 
@@ -53,6 +58,10 @@ a#play_the_piano {
 .its_broken {
     background-color: #c00;
     color: #fff;
+}
+
+.its_broken a {
+    color: #ff0;
 }
 
 .hey_this_is_important {
@@ -75,9 +84,10 @@ a#play_the_piano {
     font-family: Helvetica, Arial, sans-serif;
 }
 
-a#get_a_different_browser {
+#get_a_different_browser a {
     color: #ff0;
 }
+
 
 .additional_info {
     text-align: right;
