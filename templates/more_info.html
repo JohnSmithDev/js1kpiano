@@ -15,7 +15,8 @@
 	    <a href="#tech">Technical details</a>
 	    | 
 	    <a href="#links">Links to external HTML5 audio pages</a>
-	    
+	    |
+	    <a href="#contact">Contact</a>
 		
 	</nav>
 	<h1>More Information</h1>
@@ -55,6 +56,19 @@
 		</tr>
 		<tr class="its_broken">
 		    <td>
+			<a href="http://caminobrowser.org">Camino</a>
+		    </td>
+		    <td>2.0.4</td>
+		    <td>Mac OSX</td>
+		    <td>No</td>
+		    <td>
+			Not sure what the precise problem is; I'm assuming that it's
+			down to the fact that this is derived from a fairly old version
+			of Firefox?  (3.0.19)
+		    </td>
+		</tr>
+		<tr class="its_broken">
+		    <td>
 			<a href="http://www.google.com/chrome">Chromium</a>,
 			<a href="http://www.chromium.org">Chromium</a>,
 			<a href="http://www.srware.net/en/software_srware_iron.php">Iron</a>
@@ -84,14 +98,33 @@
 		    <td>4.0b5</td>
 		    <td>Windows</td>
 		    <td>Yes</td>
-		    <td />
+		    <td>I would imagine it works on Mac OSX and Linux as well, but
+			I haven't tested that combination</d>
+		</tr>
+		<tr class="its_broken">
+		    <td><a href="http://ie.microsoft.com/testdrive/">Internet Explorer</a></td>
+		    <td>IE9 Platform Preview</td>
+		    <td>Windows 7</td>
+		    <td>No</td>
+		    <td>
+			Doesn't support WAV audio, so ultimately it won't work - but it doesn't even seem to get
+			far enough to even be able to try to play audio files
+		    </td>
+		</tr>
+		<tr class="its_broken">
+		    <td>Internet Explorer</td>
+		    <td>8 or earlier</td>
+		    <td>Windows</td>
+		    <td>No</td>
+		    <td>Don't even think about it :-)</td>
 		</tr>
 		<tr class="it_works">
 		    <td><a href="http://www.opera.com">Opera</a></td>
-		    <td>10.something</td>
-		    <td>Windows, Mac OSX</td>
+		    <td>10.61</td>
+		    <td>Windows</td>
 		    <td>Yes</td>
-		    <td />
+		    <td>I would imagine it works on Mac OSX and Linux as well, but
+			I haven't tested that combination</d>
 		</tr>
 		<tr class="it_works">
 		    <td><a href="http://www.apple.com/safari">Safari</a></td>
@@ -119,29 +152,15 @@
 			Lack of a physical keyboard is a fundamental obstacle.
 			I do have some aborted code that should work with a
 			touchscreen, but it won't be able to fit into 1k along
-			with the existing keyboard-oriented code.  I'll post
-			this up here at some point when I get the chance.
+			with the existing keyboard-oriented code.  If the WAV/data URI
+			code works on Mobile Safari, then I'll post
+			the code up here when I get the chance.
 		    </td>
-		</tr>
-		<tr class="its_broken">
-		    <td><a href="http://ie.microsoft.com/testdrive/">Internet Explorer</a></td>
-		    <td>IE9 Platform Preview</td>
-		    <td>Windows 7</td>
-		    <td>No</td>
-		    <td>Doesn't support WAV audio, but it doesn't even seem to get
-		    far enough to even be able to try to play audio files</td>
-		</tr>
-		<tr class="its_broken">
-		    <td>Internet Explorer</td>
-		    <td>6,7,8</td>
-		    <td>Windows</td>
-		    <td>No</td>
-		    <td>Don't even think about it :-)</td>
 		</tr>
 	    </table>
 	    <p>
-		Given the fact that this app doesn't work in Chrome, it's unlikely to
-		get very far
+		Given the fact that this app doesn't work in Chrome-like browsers,
+		it's unlikely to get very far
 		in the <a href="http://js1k.com/rules">JS1k judging</a>.
 	    </p>
 	</div>
@@ -176,7 +195,31 @@
 
 	<div id="links">
 	    <h2>Links</h2>
-	    <p>To add....</p>
+	    <h3>Other HTML5 piano/instrument apps</h3>
+	    <p>
+		These use external samples, so sound a hell of a lot
+		better than my plain sine waves.
+	    </p>
+	    <ul>
+		<li>
+		    <a href="http://www.azoffdesign.com/piano">Azoff Design HTML5 piano</a>
+		</li>
+		<li>
+		    <a href="http://evilbrainjono.net/music/">Jono Bacon keyboard</a>
+		</li>
+	    </ul>
+
+	    <p>More to add....</p>
+	</div>
+
+	<div id="contact">
+	    <h2>Contact</h2>
+	    <ul>
+		<li>My dead-on-arrival <a href="http://twitter.com/JohnMMIX">Twitter</a></li>
+		<li>My <a href="http://www.menboku.co.uk">company site</a> that could certainly do with more
+		    than the 20 minutes of work it's had so far...</li>
+		<li><a href="http://uk.linkedin.com/pub/john-smith/14/377/6a7">LinkedIn</a></li>
+	    </ul>
 	</div>
 
     </body>
