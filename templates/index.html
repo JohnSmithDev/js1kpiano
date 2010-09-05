@@ -8,11 +8,11 @@
 	<nav>
 	    <a href="#how_to_use_this">How to use this</a>
 	    |
-	    <a href="#compatibility">Browser compatibility</a>
+	    <a href="/more_info#compatibility">Browser compatibility</a>
 	    |
-	    <a href="#tech">Technical details</a>
+	    <a href="/more_info#tech">Technical details</a>
 	    | 
-	    <a href="#links">Links to external HTML5 audio pages</a>
+	    <a href="/more_info#links">Links to external HTML5 audio pages</a>
 	    
 		
 	</nav>
@@ -26,14 +26,31 @@
 	    might be a better comparison, both in terms of sound fidelity and 
 	    usability :-).
 	</p>
+
 	<p>
 	    <span class="hey_this_is_important">Important:</span> This application uses
 	    web technologies
 	    which are not - as of September 2010 - supported by all browsers.
 	    Please see the <a href="#compatibility">compatibility
-		table</a> below to see if your browser is one which
+		table</a> to see if your browser is one which
 	    provides the necessary functionality.
 	</p>
+
+	{% if not isCompatible %}
+	<div id="get_a_different_browser">
+	    <p>
+		Sorry, but it looks like your browser doesn't have the
+		necessary features to run this.  We would advise trying
+		<a href="http://www.opera.com">Opera</a>,
+		<a href="http://www.mozilla.com/firefox">Firefox</a> or 
+		<a href="http://www.apple.com/safari">Safari</a> instead.
+	    </p>
+	    <p class="additional_info">
+		Your browser reports itself as
+		<span class="technobabble">{{ userAgent|escape}} </span>
+	    </p>
+	</div>
+	{% endif %}
 
 	<div id="how_to_use_this">
 	    <h2>How to use this</h2>
@@ -58,148 +75,5 @@
 	<p>
 	    <a id="play_the_piano" href="/piano.html">Play the piano</a>
 	</p>
-
-	<div id="compatibility">
-	    <h2>Browser compatibility</h2>
-	    <p>
-		This application requires that your browser supports (parts of) the
-		<a href="http://www.w3schools.com/html5/tag_audio.asp>&lt;audio&gt;</a> element introduced in
-		<a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/">HTML5</a>
-		specification.  Further, it requires that the
-		browser support the <a href="https://ccrma.stanford.edu/courses/422/projects/WaveFormat/">WAV</a> format for audio data.
-		<span class="by_the_way">
-		    (See the
-		    <a href="#tech">technical details</a> section about
-		    what these things actually mean.)
-		</span>
-	    </p>
-	    <p>
-		Obviously you will need to enable JavaScript in your
-		browser.  If you don't know what this means, don't worry -
-		it will almost certainly be
-		enabled by default.
-	    </p>
-	    <p>
-		The table below only lists browser/operating system
-		configurations which I have personally tested, and
-		is by no means a definitive or authoritative list.
-	    </p>
-	    <table>
-		<tr>
-		    <th>Browser</th>
-		    <th>Version</th>
-		    <th>Operating System</th>
-		    <th>Does it work?</th>
-		    <th>Additional notes</th>
-		</tr>
-		<tr class="its_broken">
-		    <td>Chrome</td>
-		    <td>Any</td>
-		    <td>Windows, Mac OSX, Linux</td>
-		    <td>No</td>
-		    <td>
-			Chrome does not support the WAV audio format, apparently because
-			they don't want to encourage uncompressed formats.  Somehow I doubt
-			you could generate MP3s, OGGs etc in &lt;1k of JavaScript ;-) See
-			<a href="http://code.google.com/p/chromium/issues/detail?id=23916">23916</a>
-			and
-			<a href="http://code.google.com/p/chromium/issues/detail?id=42687">42687</a>
-			on their issue tracker for more information.
-		    </td>
-		</tr>
-		<tr class="it_works">
-		    <td>Firefox</td>
-		    <td>3.6.8</td>
-		    <td>Mac OSX, Windows, Linux</td>
-		    <td>Yes</td>
-		    <td />
-		</tr>
-		<tr class="it_works">
-		    <td>Minefield (Firefox beta)</td>
-		    <td>4.0b5</td>
-		    <td>Windows, Mac OSX, Linux</td>
-		    <td>Yes</td>
-		    <td />
-		</tr>
-		<tr class="it_works">
-		    <td>Opera</td>
-		    <td>10.something</td>
-		    <td>Windows, Mac OSX</td>
-		    <td>Yes</td>
-		    <td />
-		</tr>
-		<tr class="it_works">
-		    <td>Safari</td>
-		    <td>5.0.1</td>
-		    <td>Windows, Mac OSX</td>
-		    <td>Yes*</td>
-		    <td>Safari requires QuickTime to be installed for
-			audio (or video) playback.  This should be
-			the default on Mac OSX, but you might have to
-			install QuickTime on Windows, as it isn't
-			included in the Safari installer.
-			<br />
-			Compared to other
-			browsers, Safari is noticeably
-			slower to start, and more laggy in responding
-			to keyboard presses.
-		    </td>
-		</tr>
-		<tr class="its_broken">
-		    <td>Internet Explorer</td>
-		    <td>IE9 Platform Preview</td>
-		    <td>Windows 7</td>
-		    <td>No</td>
-		    <td>Doesn't support WAV audio, but it doesn't even seem to get
-		    far enough to even be able to try to play audio files</td>
-		</tr>
-		<tr class="its_broken">
-		    <td>Internet Explorer</td>
-		    <td>6,7,8</td>
-		    <td>Windows</td>
-		    <td>No</td>
-		    <td>Don't even think about it :-)</td>
-		</tr>
-	    </table>
-	    <p>
-		Given the fact that this app doesn't work in Chrome, it's unlikely to
-		get very far
-		in the <a href="http://js1k.com/rules">JS1k judging</a>.
-	    </p>
-	</div>
-
-	<div id="tech">
-	    <h2>Technical details</h2>
-	    <p>To be properly written up...</p>
-	    <h3 id="data_uris">Data URIs</h3>
-	    <h3 id="audio">Generating audio data in JavaScript</h3>
-	    <h3 id="compiling">Compiling down to under 1k in size</h3>
-	    <h3 id="issues">Browser issues</h3>
-	    <h4 id="firefox_issues">Firefox</h4>
-	    <ul>
-		<li>Spaces in data URIs</li>
-		<li>Sample rates in 3.6.8 on Windows</li>
-	    </ul>
-	    <h4 id="opera_issues">Opera</h4>
-	    <ul>
-		<li>Crash when trying to do 'new Audio()' with large data URIs</li>
-	    </ul>
-	    <h4 id="safari_issues">Safari</h4>
-	    <ul>
-		<li>Clearing the canvas</li>
-		<li>Slowness</li>
-	    </ul>
-	    <h4 id="chrome_issues">Chrome</h4>
-	    <ul>
-		<li>Clearing the canvas</li>
-		<li>Lack of support for WAV</li>
-	    </ul>
-	</div>
-
-	<div id="links">
-	    <h2>Links</h2>
-	    <p>To add....</p>
-	</div>
-
     </body>
 </html>

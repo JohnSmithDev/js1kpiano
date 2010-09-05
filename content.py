@@ -38,10 +38,25 @@ class BrowserDetails:
     else:
         self.os_name = "Unknown"
 
+  def is_compatible(self):
+    if self.browser_name in ["Firefox", "Safari", "Opera"]:
+      return True
+    else:
+      return False
 
 
-def dict_for_django_template():
-    return {
-        "foo":"bar"
-        }
+def dict_for_django_template(rh):
+  if "User-Agent" in rh.request.headers:
+    ua=rh.request.headers['User-Agent']
+    if not ua or len(ua)==0:
+      ua="Unknown"
+  else:
+    ua = "[No browser User-Agent passed]"
+  browser = BrowserDetails(ua)
+  return {
+    "browser": browser,
+    "isCompatible": browser.is_compatible(),
+    "userAgent": ua,
+    "foo":"bar"
+    }
 

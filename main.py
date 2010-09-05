@@ -21,19 +21,26 @@ class MainPage(webapp.RequestHandler):
   def get(self):
     template_file=os.path.join("templates", "index.html")
     self.response.out.write(template.render(template_file,
-                                            content.dict_for_django_template()))
+                           content.dict_for_django_template(self)))
+
+class InfoPage(webapp.RequestHandler):
+  def get(self):
+    template_file=os.path.join("templates", "more_info.html")
+    self.response.out.write(template.render(template_file,
+                           content.dict_for_django_template(self)))
 
 class PianoPage(webapp.RequestHandler):
   def get(self):
     template_file=os.path.join("templates", "piano.html")
     self.response.out.write(template.render(template_file,
-                                            content.dict_for_django_template()))
+                             content.dict_for_django_template(self)))
 
 
 def main():
   logging.getLogger().setLevel(logging.DEBUG)
   application=webapp.WSGIApplication(
       [('/piano.*', PianoPage),
+      ('/more_info', InfoPage),
       ('.*', MainPage)],
       debug=True)
   # run_wsgi_app(application)
