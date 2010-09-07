@@ -1,8 +1,12 @@
 /* An entry for the JS1k competition
    See http://js1kpiano.appspot.com for more info about how this
-   works (or doesn't ;-)
+   works (or doesn't if you're using Chrome or IE ;-)
    (c) Menboku Ltd 2010 - http://www.menboku.co.uk
    Licenced under GPL v2 - http://www.gnu.org/licenses/gpl-2.0.html
+
+   This code is full of commented out sections, some of these are
+   holdovers from abandoned ideas, sub-optimal code that may be useful
+   for understanding what's going on, etc.
 */
 
 /* Closure compiler usage:
@@ -10,12 +14,12 @@
     --js sourcefile.js --js_output_file compiledfile.js
 */
 
-/* see /proj/test/python/maketone.py for the underlying concepts behind this
-*/
+var q = 16; /* used for: converting integer to hex form
+                         check for when to clear the canvas
+                         array size */
 
-var q = 16;
-
-/* These vars are for illustrative/documentation purposes */
+/* These header vars are for illustrative/documentation purposes,
+   mostly to show how the WAVs are constructed.  */
 
 
 
@@ -41,18 +45,22 @@ var SAMPLE_SIZE = NUM_SAMPLES * BYTES_PER_SAMPLE;
 
 /* var NUM_SAMPLES = 80000; /* 00 01 38 80, hex 38= 8 */
 
-/* we can't play the same player more than once, so create duplicate players
-   for each note */
+/* We can't play the same player (note) more than once simultaneously, so create
+   DUPE_NOTES duplicate <audio> elements for each note.
+   DUPE_NOTES can be made bigger, but at the cost of memory and 
+   maybe startup speed - 5 seems a reasonable tradeoff  */
 var DUPE_NOTES = 5;
+
 var note_count = 0;
 
+/*var press_count=0; /* holdover from debugging */
 
-/*var press_count=0;*/
-
-function wav_header(num_samples) {
-    /* FF doesn't like space in data URI, but
-       Safari and Opera are OK with it */
-    return "RIFF%c4%b4%01%00" + /* SAMPLE_SIZE + x24 */ /* TODO ASCIIfy*/
+function make_wav(freq) {
+    // var angle_factor =  1273.2395447351628 / freq; /* 8000hz */
+    var angle_factor = 7018.733 / freq; /* 441.khz, actually 7018.732990 */
+    var decay = 1;
+    /*var retval = wav_header(NUM_SAMPLES);*/
+    var retval = "RIFF%c4%b4%01%00" + /* SAMPLE_SIZE + x24 */ /* TODO ASCIIfy if poss */
 	"WAVEfmt%20" + 
 	"%10%00%00%00" + /* length of this subchunk - never changes */
         "%01%00" +  /* 1 => uncompressed */
@@ -61,34 +69,23 @@ function wav_header(num_samples) {
 	"%10%b1%02%00" + /* SAMPLE_RATE * BYTES_PER_SAMPLE*/
 	"%04%00" + /* BYTES_SAMPLE */
 	"%10%00" + /* BITS_PER_SAMPLE */
-	"data%a0%b4%01%00"; /* SAMPLE_SIZE - TODO ASCIIfy */
-}
-
-function make_wav(freq) {
-    // var angle_factor =  1273.2395447351628 / freq; /* 8000hz */
-    var angle_factor = 7018.733 / freq; /* 441.khz, actually .732990 */
-    var decay = 1;
-    var retval = wav_header(NUM_SAMPLES);
+	"data%a0%b4%01%00"; /* SAMPLE_SIZE - TODO ASCIIfy if poss */
 
     for (var i=0; i<NUM_SAMPLES; i++) {
 	var angle = i / angle_factor;
-	// decay *= 0.9995; /* 8000hz */
-	/*
-	if (i<100) {
-	    decay=0;
-	} else if (i>100 && i<1000) {
-	    decay=(i-100)/900;
-	} else {
-	    decay *= 0.9995;
-	}
-	*/
-	decay *= 0.9998; /* 441.khz */
+
+
+	// decay *= 0.9995; /* OK for 8000hz, too quick for 44.1khz */
+	decay *= 0.9998; /* 44.1khz */
+
 	var level = Math.sin(angle) * decay;
-	/* 8 bit code 
+
+	/* 8 bit 'samples' - laggy on Windows FF 3.6.8
 	var normalized = parseInt(level * 127) + 128;
 	retval += "%" + (normalized<16?"0":"") + normalized.toString(16);
 	*/
-	/* 16 bit code */
+
+	/* 16 bit 'samples' */
 	var normalized = parseInt(level * 32767);
 	if (normalized<0) {
 	    normalized=65536+normalized;
@@ -96,7 +93,7 @@ function make_wav(freq) {
 	var high_byte = normalized >> 8;
 	var low_byte = normalized & 255;
 	for (var channel_loop=0; channel_loop<2; channel_loop++) {
-	    /* twice for stereo */
+	    /* output twice for each stereo channel */
 	    retval += "%" + (low_byte<q?"0":"") + low_byte.toString(q) +
 		"%" + (high_byte<q?"0":"") + high_byte.toString(q);
 	}
@@ -108,40 +105,41 @@ function make_wav(freq) {
 /*make_wav(261.64, 80000);*/
 
 var freq = 261.64; /* middle C */
-/*var freq = 130.82 /* an octave down */
-
-/*var melody="02457975420";*/
 
 var notes=new Array(q); /* 13 really, but maybe can save bytes? */
 /*var keys=new Array(13);*/
 
-/*
+/* Note names for early debugging messages before I had the canvas code
 var note_names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "Ab", "A", "A#", "B","C"];
 */
 
 var note_offsets=[0,0,1,1,2,3,3,4,5,5,5,6,7];
-var s="\u266f"; 
-var note_accents=["", s, /* C */
-		  "", s,  /* D */
+var s="\u266f"; /* Closure seems to think this isn't needed */
+var note_accents=["", s, /* C, C# */
+		  "", s,  /* D, D# */
 		  "", /* E */
-		  "", s,  /* F */
+		  "", s,  /* F, F# */
 		  "", /* G */
-		  "\u266d", "", s,  /* A */
+		  "\u266d", "", s,  /* Ab, A, A# */
 		  "", /* B */
 		  "" /* C */
 		 ];
 
 
 function init_canvas() {
-	cv.width++;
-	c.font = "50px sans"; /* need a font name it seems */
+    cv.width^=1; /* Dive into HTML5 is wrong about not having to change the width
+                    to alter the canvas dimensions in Webkit browsers,
+                    see http://webkit.org/blog/176/css-canvas-drawing/ */
+
+    c.font = "50px sans"; /* need a font name it seems; doesn't actually matter if it's a really font though?!? */
 	
-	note_count=0;
+    note_count=0;
 
 }		  
 
 function play_note(note_number) {
     
+/* Debugging */
 /*
     var log_el = document.getElementById("debug");
     if (log_el) {
@@ -163,29 +161,22 @@ function play_note(note_number) {
     note_count++;
 }
 
-/*
+/* Holdover from when I had DIVs representing a genuine musical keyboard -
+   abandoned as (a) didn't look like I'd get it all into 1k, and (b) not
+   really usable on anything other than a touchscreen.  Might be salvagable
+   for an iPhone/iPad version?
 function play_note_from_key() {
     var key_number = this.id.substr(3);
-    /*alert("pressed " + key_number);* /
+    // alert("pressed " + key_number);
     play_note(key_number)
 }
 */
 
-/*
-function play_note_in_melody(seq_number) {
-    play_note(melody[seq_number]);
-    if (seq_number < melody.length) {
-	setTimeout(play_note_in_melody(note_number+1), 1000);
-    } else {
-	alert("All notes in melody played!");
-    }
-}
-*/
 
 /*var xpos=0;*/
 /* max is really 13 rather than 16 aka q, but trying to save bytes */
 for (var note_number=0; note_number<q; note_number++) {
-    /*
+    /* more holdovers from the draw a keyboard with DIVs */
     var white_note = true;
     if ((note_number % 12)==1 ||
 	(note_number % 12)==3 ||
@@ -195,7 +186,8 @@ for (var note_number=0; note_number<q; note_number++) {
 	white_note = false;
     } 
     */
-    var freqstr=make_wav(freq); /* space inefficient but quicker */
+    var freqstr=make_wav(freq); /* space inefficient but quicker than recalculating the
+                                   sine wave for each duplicate of the note */
     for (var i=0; i<DUPE_NOTES; i++) {
 
 	notes[note_number] = document.createElement("audio");
@@ -203,16 +195,17 @@ for (var note_number=0; note_number<q; note_number++) {
 	/*notes[note_number].autobuffer = true;*/ 
 	/* notes[note_number].preload = "auto"; /* is this needed on data URI? */
 
-	/* More efficient but causes Opera to crash 
+	/* More space efficient but causes Opera to crash 
 	notes[note_number] = Audio("data:audio/wave,"+ make_wav(freq));
 	*/
 	notes[note_number].id = /*"myaudio" + */ note_number  + "_" + i;
 
-	/*notes[note_number].controls = true ;*/
+	/*notes[note_number].controls = true ; /* from debugging */
 	document.body.appendChild(notes[note_number]);
     }
 
-    /*
+    /* Main part of the abandoned code to draw a musical keyboard that
+       you could touch/click to play a note
     keys[note_number] = document.createElement("div");
     keys[note_number].id="key" + note_number;
     keys[note_number].style.position="absolute";
@@ -241,28 +234,9 @@ for (var note_number=0; note_number<q; note_number++) {
     document.body.appendChild(keys[note_number]);
     */
 
-    freq *= 1.059463;
+    freq *= 1.059463; /* 2 ^ (1/12) */
 }
 
-/*
-var key_mappings = [
-    220, // backslash  - 0 C 
-    65, // A           - 1 C#
-    90, // Z           - 2 D
-    83, // S           - 3 D#
-    88, // X           - 4 E
-    // skip black note
-    67, // C           - 5 F
-    70, // F           - 6 F#
-    86, // V           - 7 G
-    71, // G           - 8 G#
-    66, // B           - 9 A
-    72, // H           - 10 A#
-    78, // N           - 11 B
-    // skip black note
-    77// M           - 12 C
-];
-*/  
 var key_mappings = [
     81, // Q - 00 - C
     50, // 2 - 01 - C#
@@ -288,9 +262,13 @@ function play_from_keyboard(e) {
     for (var i=0; i<key_mappings.length; i++) {
 	if (key_id == key_mappings[i]) {
 	    play_note(i);
-	    /* break; /* not strictly necessary */
+	    /* break; /* not strictly necessary, and losing it saves a few bytes */
 	}
     }
+    /* Abandoned code to allow shifting of octaves, never really got any more done
+       on it than this.  If I dumped the canvas stuff I could maybe have got this
+       working, but I wanted to have a token gesture towards doing something in
+       Chrome */
     /*
     if (key_id == 219) {
 	octave--;
